@@ -1,11 +1,10 @@
 // Add code to userModel.js to complete the model
-
+let mongoose = require("mongoose");
 const express = require("express");
 const logger = require("morgan");
-// const mongoose = require("mongoose");
-
+// const seeeds = require("./seeders/seed")
 const PORT = process.env.PORT || 3000;
-
+const db = require("./models");
 // const User = require("./userModel.js");
 
 const app = express();
@@ -14,9 +13,8 @@ app.use(logger("dev"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-const seed = require("./seeders/seed");
 app.use(express.static("public"));
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/custommethoddb", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
 // Routes
 
@@ -45,9 +43,22 @@ app.get("/stats", ({body}, res) => {
     res.sendFile((__dirname+"/public/stats.html"));
   });
 
-  app.get("/api/workouts", ({body}, res) => {
-      console.log("entra al inicio del site")
-    res.sendFile((__dirname+"/public/stats.html"));
+  app.get("/api/workouts/range", ({body}, res) => {
+    db.Workouts.find().populate("").then(data =>{
+      console.log(data)
+      res.json(data);
+    }).catch(()=>{
+      res.status(500);
+    })
+  });
+
+  app.get("/api/workouts/", ({body}, res) => {
+    db.Workout.find({}).then(data =>{
+      console.log(data)
+      res.json(data);
+    }).catch(()=>{
+      res.status(500);
+    })
   });
 
 // Start the server
