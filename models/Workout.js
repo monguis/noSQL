@@ -6,10 +6,7 @@ const WorkoutModel = new Schema({
     type: Date,
   },
   exercises: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "exercises"
-    }
+    {}
   ]
 });
 

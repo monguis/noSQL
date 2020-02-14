@@ -44,22 +44,53 @@ app.get("/stats", ({body}, res) => {
   });
 
   app.get("/api/workouts/range", ({body}, res) => {
-    db.Workouts.find().populate("").then(data =>{
-      console.log(data)
+    db.Workout.find({})
+    .then(data =>{
       res.json(data);
     }).catch(()=>{
       res.status(500);
     })
   });
 
-  app.get("/api/workouts/", ({body}, res) => {
-    db.Workout.find({}).then(data =>{
-      console.log(data)
+  app.get("/api/workouts", ({body}, res) => {
+    db.Workout.find({})
+    .then(data =>{
       res.json(data);
     }).catch(()=>{
       res.status(500);
     })
   });
+
+  app.put("/api/workouts/:id", (req, res) => {
+    // console.log(req.params.id)
+    db.Workout.findOneAndUpdate({_id:req.params.id}, { $push: { exercises: req.body } }, { new: true })
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+    // db.Workout.create(req.body)
+    // .then(data => {
+    //   res.json(data);
+    // })
+    // .catch(({message}) => {
+    //   console.log(message);
+    // });
+  });
+
+  app.post("/api/workouts/", (req, res) => {
+    db.Workout.create({})
+    .then(data => {
+      res.json(data);
+    })
+    .catch(({message}) => {
+      console.log(message);
+    });
+  });
+
+
+  
 
 // Start the server
 app.listen(PORT, () => {
