@@ -11,8 +11,13 @@ const WorkoutModel = new Schema({
   ],
   totalDuration: {
     type: Number,
-    default:0
-    
+    default: function (){
+      let res = 0;
+      for(exer of this.exercises){
+        res+=exer.duration;
+      }
+      return res;
+    },
   }
 });
 
